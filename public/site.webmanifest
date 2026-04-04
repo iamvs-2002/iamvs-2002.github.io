@@ -1,0 +1,24 @@
+{
+  "name": "Vaibhav Singhal",
+  "short_name": "Vaibhav",
+  "id": "https://iamvs-2002.github.io/",
+  "start_url": "https://iamvs-2002.github.io/",
+  "scope": "https://iamvs-2002.github.io/",
+  "icons": [
+    {
+      "src": "https://iamvs-2002.github.io/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://iamvs-2002.github.io/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

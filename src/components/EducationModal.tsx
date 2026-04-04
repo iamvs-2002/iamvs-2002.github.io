@@ -1,39 +1,28 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 import ModalShell from "./ModalShell";
-
-const LNMIIT_LOGO =
-  "https://lnmiit.ac.in/wp-content/uploads/2023/07/cropped-LNMIIT-Logo-Transperant-Background-e1699342125845.png";
+import { portfolio } from "../data/portfolio";
 
 interface EducationModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const coursework = [
-  "Software engineering",
-  "Advanced programming (Java)",
-  "Data structures and algorithms",
-  "Computer networks",
-  "Database management (MySQL)",
-  "Operating systems",
-  "Computer programming (C)",
-  "Computer security",
-];
-
 const EducationModal = ({ isOpen, onClose }: EducationModalProps) => {
+  const ed = portfolio.education;
+
   return (
     <ModalShell isOpen={isOpen} onClose={onClose} ariaLabel="Education">
       <div className="pb-8 pt-2">
         <div className="border-b border-gray-100 bg-gradient-to-b from-indigo-50/40 to-white px-6 pb-8 pt-6 sm:px-8 sm:pt-8">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
-            Education
+            {ed.eyebrow}
           </p>
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
             <div className="flex shrink-0 items-center justify-start sm:justify-center">
               <img
-                src={LNMIIT_LOGO}
-                alt="LNMIIT"
+                src={ed.institutionLogoUrl}
+                alt={ed.institutionLogoAlt}
                 className="max-h-24 w-auto max-w-[min(100%,220px)] object-contain sm:max-h-28"
               />
             </div>
@@ -43,20 +32,20 @@ const EducationModal = ({ isOpen, onClose }: EducationModalProps) => {
                 <span className="text-sm font-medium">Degree</span>
               </div>
               <h3 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
-                The LNM Institute of Information Technology
+                {ed.schoolName}
               </h3>
-              <p className="text-base text-gray-700">
-                Bachelor of Technology in Computer Science
-              </p>
-              <p className="text-sm font-medium text-gray-500">Aug 2019 — May 2023</p>
+              <p className="text-base text-gray-700">{ed.degree}</p>
+              <p className="text-sm font-medium text-gray-500">{ed.dates}</p>
             </div>
           </div>
         </div>
 
         <div className="px-6 pt-6 sm:px-8">
-          <p className="mb-3 text-sm font-semibold text-gray-900">Coursework & focus</p>
+          <p className="mb-3 text-sm font-semibold text-gray-900">
+            Coursework & focus
+          </p>
           <ul className="grid gap-2 sm:grid-cols-2">
-            {coursework.map((item) => (
+            {ed.coursework.map((item) => (
               <li
                 key={item}
                 className="flex items-start gap-2 rounded-xl border border-gray-100 bg-gray-50/80 px-3 py-2.5 text-sm text-gray-700"

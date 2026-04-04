@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import ModalShell from "./ModalShell";
-import { workExperienceEntries } from "../data/workExperience";
+import { portfolio } from "../data/portfolio";
 
 interface WorkExperienceModalProps {
   isOpen: boolean;
@@ -31,20 +31,26 @@ function RoleLogo({ src }: { src?: string }) {
 }
 
 const WorkExperienceModal = ({ isOpen, onClose }: WorkExperienceModalProps) => {
+  const w = portfolio.work;
+
   return (
-    <ModalShell isOpen={isOpen} onClose={onClose} ariaLabel="Work experience">
+    <ModalShell
+      isOpen={isOpen}
+      onClose={onClose}
+      ariaLabel={w.modalAriaLabel}
+    >
       <div className="pb-8 pt-2">
         <div className="border-b border-gray-100 bg-gradient-to-b from-emerald-50/50 to-white px-6 pb-6 pt-6 sm:px-8 sm:pt-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
-            Work experience
+            {w.eyebrow}
           </p>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-gray-600">
-            Selected roles—summaries only; happy to go deeper in conversation.
+            {w.intro}
           </p>
         </div>
 
         <div className="divide-y divide-gray-100 px-2 sm:px-4">
-          {workExperienceEntries.map((job) => (
+          {w.entries.map((job) => (
             <article
               key={`${job.company}-${job.role}-${job.date}`}
               className="flex gap-4 py-5 first:pt-6 sm:gap-5 sm:px-2"

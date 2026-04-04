@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXTwitter, faGithub, faLinkedin, faHashnode, faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelopeOpen } from "@fortawesome/free-regular-svg-icons";
+import {
+  portfolio,
+  socialIconByPlatform,
+} from "../data/portfolio";
 
 interface FooterProps {
   mode?: "light" | "dark";
@@ -14,24 +16,18 @@ const Footer = ({ mode = "dark" }: FooterProps) => {
 
   return (
     <footer className="fixed bottom-3 w-full text-center z-50">
-      <a href="https://x.com/iamvs2002" target="_blank" rel="noopener noreferrer" className={linkClasses}>
-        <FontAwesomeIcon icon={faXTwitter} />
-      </a>
-      <a href="https://www.instagram.com/iamvs2002" target="_blank" rel="noopener noreferrer" className={linkClasses}>
-        <FontAwesomeIcon icon={faInstagram} />
-      </a>
-      <a href="https://github.com/iamvs-2002" target="_blank" rel="noopener noreferrer" className={linkClasses}>
-        <FontAwesomeIcon icon={faGithub} />
-      </a>
-      <a href="https://www.linkedin.com/in/iamvs2002/" target="_blank" rel="noopener noreferrer" className={linkClasses}>
-        <FontAwesomeIcon icon={faLinkedin} />
-      </a>
-      <a href="https://iamvs2002.hashnode.dev/" target="_blank" rel="noopener noreferrer" className={linkClasses}>
-        <FontAwesomeIcon icon={faHashnode} />
-      </a>
-      <a href="mailto:work.iamvs2002@gmail.com" target="_blank" rel="noopener noreferrer" className={linkClasses}>
-        <FontAwesomeIcon icon={faEnvelopeOpen} />
-      </a>
+      {portfolio.social.links.map((link) => (
+        <a
+          key={link.platform}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={linkClasses}
+          aria-label={link.ariaLabel}
+        >
+          <FontAwesomeIcon icon={socialIconByPlatform[link.platform]} />
+        </a>
+      ))}
     </footer>
   );
 };

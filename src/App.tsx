@@ -10,26 +10,18 @@ import WorkExperienceModal from "./components/WorkExperienceModal";
 import HighlightsModal from "./components/HighlightsModal";
 import getRandomColor from "./components/Colors";
 import Menu from "./components/Menu";
-import { SITE_URL } from "./site";
+import { portfolio, type ModalSectionId } from "./data/portfolio";
 
 import logo from "/src/assets/img/logo.png";
 
 const backgroundColor = getRandomColor();
-
-type ActiveModal =
-  | "about"
-  | "work"
-  | "education"
-  | "projects"
-  | "highlights"
-  | null;
 
 function App() {
   const [randomColor, setRandomColor] = useState(
     getRandomColor(backgroundColor)
   );
   const [menuActive, setMenuActive] = useState(false);
-  const [activeModal, setActiveModal] = useState<ActiveModal>(null);
+  const [activeModal, setActiveModal] = useState<ModalSectionId | null>(null);
 
   useEffect(() => {
     const sketch = Sketch.create({
@@ -62,7 +54,6 @@ function App() {
       },
     });
 
-    // Set initial params
     sketch.fillStyle = randomColor;
     sketch.strokeStyle = randomColor;
 
@@ -77,28 +68,30 @@ function App() {
 
   const closeModal = () => setActiveModal(null);
 
+  const { meta, hero } = portfolio;
+
   return (
     <>
       <div className="relative h-full w-full" style={{ backgroundColor }}>
         <header className="fixed z-10 w-full p-8 pointer-events-none">
           <div className="text-left align-middle pointer-events-none">
             <a
-              href={SITE_URL}
+              href={meta.siteUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="block w-[20vh] h-auto"
             >
-              <img className="w-full h-auto" src={logo} alt="iamvs2002" />
+              <img className="w-full h-auto" src={logo} alt={meta.logoAlt} />
             </a>
           </div>
         </header>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative z-10 pointer-events-none text-center">
             <h1 className="text-5xl md:text-7xl 2xl:text-8xl font-bold mb-5">
-              Hi, I'm Vaibhav!
+              {hero.title}
             </h1>
             <h2 className="text-lg md:text-2xl 2xl:text-3xl font-bold">
-              Founder & CEO - Needle
+              {hero.subtitle}
             </h2>
           </div>
           <div className="absolute inset-0 z-0 overflow-hidden">
@@ -108,29 +101,9 @@ function App() {
         <Menu
           menuActive={menuActive}
           toggleMenu={toggleMenu}
-          onOpenAbout={() => {
-            setActiveModal("about");
-            toggleMenu();
-          }}
-          onOpenWork={() => {
-            setActiveModal("work");
-            toggleMenu();
-          }}
-          onOpenEducation={() => {
-            setActiveModal("education");
-            toggleMenu();
-          }}
-          onOpenProjects={() => {
-            setActiveModal("projects");
-            toggleMenu();
-          }}
-          onOpenHighlights={() => {
-            setActiveModal("highlights");
-            toggleMenu();
-          }}
+          onOpenModal={setActiveModal}
           logo={logo}
         />
-        
       </div>
       <Footer mode="dark" />
 

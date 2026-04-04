@@ -45,6 +45,7 @@ Open the URL Vite prints (usually `http://localhost:5173`). Edit files and save;
 | ------- | ------- |
 | `npm run dev` / `npm start` | Dev server (Vite) |
 | `npm run build` | Typecheck + production build → `dist/` |
+| `npm run deploy` | Build, then publish `dist/` to the `gh-pages` branch (GitHub Pages) |
 | `npm run preview` | Serve `dist/` locally (test the real bundle) |
 | `npm run lint` | ESLint |
 
@@ -57,9 +58,8 @@ Before opening a PR, run **`npm run build`** and **`npm run lint`** so CI and re
 | Path | Role |
 | ---- | ---- |
 | `src/App.tsx` | Canvas, header, menu, modal routing |
-| `src/site.ts` | Canonical site URL (`SITE_URL`) for logo links |
+| `src/data/portfolio.ts` | All site copy, navigation, work/education/projects/highlights data, `SITE_URL` |
 | `src/components/` | Modals, menu, footer, `ModalShell` |
-| `src/data/` | `workExperience.ts`, `highlights.ts` |
 | `public/` | Favicons, manifest, `work/` and `highlights/` images |
 | `index.html` | HTML shell; Vite injects bundled JS/CSS in production |
 
@@ -69,7 +69,7 @@ Before opening a PR, run **`npm run build`** and **`npm run lint`** so CI and re
 
 | Concern | Where |
 | ------- | ----- |
-| Public site URL | `src/site.ts`, meta tags in `index.html`, absolute URLs in `public/site.webmanifest` |
+| Public site URL | `src/data/portfolio.ts` (`meta.siteUrl`), meta tags in `index.html`, absolute URLs in `public/site.webmanifest` |
 | Asset base path | `vite.config.ts` → `base` (use `"/"` for `https://USER.github.io/`) |
 
 Keep these in sync when the deploy URL changes.
@@ -91,9 +91,10 @@ GitHub Pages serves **static files only**. It does **not** run `npm run build`. 
 ### Each release
 
 ```bash
-npm run build
-npx gh-pages -d dist
+npm run deploy
 ```
+
+(Equivalent: `npm run build` then `gh-pages -d dist`; `gh-pages` is a dev dependency.)
 
 `gh-pages` updates the **`gh-pages`** branch with the contents of **`dist/`** and pushes to `origin`. After a minute, the live site should match.
 
@@ -122,14 +123,14 @@ Issues and PRs that only adjust third-party dependencies without a security or b
 | Menu item | Behavior |
 | --------- | -------- |
 | About | Profile, socials, bio (`AboutModal`) |
-| Work experience | Résumé-style list (`WorkExperienceModal`, `src/data/workExperience.ts`) |
-| Education | Degree and coursework (`EducationModal`) |
-| Startups/projects | Products and links (`ProjectsModal`) |
-| Highlights | Events and links (`HighlightsModal`, `src/data/highlights.ts`) |
+| Work experience | Résumé-style list (`WorkExperienceModal`, `portfolio.work`) |
+| Education | Degree and coursework (`EducationModal`, `portfolio.education`) |
+| Startups/projects | Products and links (`ProjectsModal`, `portfolio.projects`) |
+| Highlights | Events and links (`HighlightsModal`, `portfolio.highlights`) |
 | Blog | External → Hashnode |
 | Let’s Connect | `mailto:` |
 
-Header and menu logo URLs use `SITE_URL` from `src/site.ts`.
+Header and menu logo URLs use `portfolio.meta.siteUrl` (exported as `SITE_URL`).
 
 ---
 
@@ -137,12 +138,9 @@ Header and menu logo URLs use `SITE_URL` from `src/site.ts`.
 
 | What | Where |
 | ---- | ----- |
-| Canonical / SEO URL | `src/site.ts`, `index.html`, `public/site.webmanifest` |
-| Work history | `src/data/workExperience.ts` |
-| Highlights | `src/data/highlights.ts` |
-| Startups / projects | `src/components/ProjectsModal.tsx` (`projects` array) |
-| About | `src/components/AboutModal.tsx` |
-| Education | `src/components/EducationModal.tsx` |
+| Canonical / SEO URL | `src/data/portfolio.ts` (`meta.siteUrl`), `index.html`, `public/site.webmanifest` |
+| Everything else (hero, menu, socials, about, work, education, projects, highlights) | `src/data/portfolio.ts` |
+| Optional video embeds (projects / highlights) | `portfolio.ts` — `video` field (`PortfolioVideo`: YouTube id, Vimeo id, or `file` with `/media/...` under `public/`) |
 | Background color palette | `src/components/Colors.tsx` |
 
 Shared modal UI: `ModalShell.tsx`.
@@ -163,7 +161,7 @@ Referenced as `/work/...` in code:
 | `gpcssip.jpeg` | Gurugram Police Cyber Cell |
 | `engineerHub.png` | engineerHUB |
 
-LNMIIT TA uses a hosted logo URL in `workExperience.ts`. Missing images fall back to a placeholder in the UI.
+LNMIIT TA uses a hosted logo URL in `portfolio.ts` (`work.entries`). Missing images fall back to a placeholder in the UI.
 
 ### `public/highlights/` — highlight images
 
@@ -173,13 +171,13 @@ LNMIIT TA uses a hosted logo URL in `workExperience.ts`. Missing images fall bac
 | `hackercup.jpg` | Meta Hacker Cup |
 | `checkedit.jpg` | Checked It |
 
-Missing files fall back to icons from `src/data/highlights.ts`.
+Missing files fall back to icons from `portfolio.highlights` entries.
 
 ---
 
 ## GitHub profile README (optional)
 
-If you use the special [`username/username`](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme) profile repository, keep its **live URL** and branding aligned with `src/site.ts` and this README.
+If you use the special [`username/username`](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme) profile repository, keep its **live URL** and branding aligned with `portfolio.meta.siteUrl` and this README.
 
 ---
 

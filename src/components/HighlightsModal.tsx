@@ -2,8 +2,9 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import EmbedVideo from "./EmbedVideo";
 import ModalShell from "./ModalShell";
-import { highlightEntries } from "../data/highlights";
+import { portfolio } from "../data/portfolio";
 
 interface HighlightsModalProps {
   isOpen: boolean;
@@ -38,38 +39,49 @@ function HighlightVisual({
 }
 
 const HighlightsModal = ({ isOpen, onClose }: HighlightsModalProps) => {
+  const h = portfolio.highlights;
+
   return (
-    <ModalShell isOpen={isOpen} onClose={onClose} ariaLabel="Highlights">
+    <ModalShell
+      isOpen={isOpen}
+      onClose={onClose}
+      ariaLabel={h.modalAriaLabel}
+    >
       <div className="pb-8 pt-2">
         <div className="border-b border-gray-100 bg-gradient-to-b from-amber-50/60 to-white px-6 pb-6 pt-6 sm:px-8 sm:pt-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
-            Highlights
+            {h.eyebrow}
           </p>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-gray-600">
-            Hackathons, competitions, and community—short list, high signal.
+            {h.intro}
           </p>
         </div>
 
         <div className="divide-y divide-gray-100 px-2 sm:px-4">
-          {highlightEntries.map((h) => (
+          {h.entries.map((item) => (
             <article
-              key={h.title}
+              key={item.title}
               className="flex gap-4 py-5 first:pt-6 sm:gap-5 sm:px-2"
             >
-              <HighlightVisual icon={h.icon} logoSrc={h.logoSrc} />
+              <HighlightVisual icon={item.icon} logoSrc={item.logoSrc} />
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                  {h.date} · {h.context}
+                  {item.date} · {item.context}
                 </p>
                 <h3 className="mt-1 text-base font-bold text-gray-900 sm:text-lg">
-                  {h.title}
+                  {item.title}
                 </h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
-                  {h.summary}
+                  {item.summary}
                 </p>
-                {h.links && h.links.length > 0 && (
+                {item.video && (
+                  <div className="mt-4 max-w-xl">
+                    <EmbedVideo video={item.video} label={item.title} />
+                  </div>
+                )}
+                {item.links && item.links.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-                    {h.links.map((link) => (
+                    {item.links.map((link) => (
                       <a
                         key={link.href}
                         href={link.href}

@@ -1,27 +1,72 @@
 import Footer from "../Footer";
-import { SITE_URL } from "../../site";
+import {
+  portfolio,
+  type MenuEntry,
+  type ModalSectionId,
+} from "../../data/portfolio";
+import "./style.css";
+
 interface MenuProps {
   menuActive: boolean;
   toggleMenu: () => void;
-  onOpenAbout: () => void;
-  onOpenWork: () => void;
-  onOpenEducation: () => void;
-  onOpenProjects: () => void;
-  onOpenHighlights: () => void;
+  onOpenModal: (id: ModalSectionId) => void;
   logo: string;
 }
-import "./style.css";
+
+function MenuLink({
+  entry,
+  onOpenModal,
+  toggleMenu,
+}: {
+  entry: MenuEntry;
+  onOpenModal: (id: ModalSectionId) => void;
+  toggleMenu: () => void;
+}) {
+  if (entry.type === "modal") {
+    return (
+      <a
+        className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          onOpenModal(entry.id);
+        }}
+      >
+        <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
+          {entry.label}
+        </h1>
+      </a>
+    );
+  }
+
+  return (
+    <a
+      href={entry.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
+      onClick={toggleMenu}
+    >
+      <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
+        {entry.label}
+      </h1>
+    </a>
+  );
+}
 
 const Menu = ({
   menuActive,
   toggleMenu,
-  onOpenAbout,
-  onOpenWork,
-  onOpenEducation,
-  onOpenProjects,
-  onOpenHighlights,
+  onOpenModal,
   logo,
 }: MenuProps) => {
+  const { meta, navigation } = portfolio;
+
+  const openModal = (id: ModalSectionId) => {
+    onOpenModal(id);
+    toggleMenu();
+  };
+
   return (
     <div className={`menuButton ${menuActive ? "active" : ""}`}>
       <button className="menuTgl" type="button" onClick={toggleMenu}>
@@ -31,88 +76,28 @@ const Menu = ({
         <div className="fixed z-[9] p-[30px] table w-full pointer-events-none">
           <div className="text-left">
             <a
-              href={SITE_URL}
+              href={meta.siteUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="block w-[20vh] h-auto opacity-70 hover:opacity-100"
             >
-              <img className="w-full h-auto" src={logo} alt="iamvs2002" />
+              <img className="w-full h-auto" src={logo} alt={meta.logoAlt} />
             </a>
           </div>
         </div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center flex flex-col items-center justify-center">
-          <a
-            className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
-            onClick={() => {
-              onOpenAbout();
-            }}
-          >
-            <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
-              About
-            </h1>
-          </a>
-          <a
-            className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
-            onClick={() => {
-              onOpenWork();
-            }}
-          >
-            <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
-              Work experience
-            </h1>
-          </a>
-          <a
-            className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
-            onClick={() => {
-              onOpenEducation();
-            }}
-          >
-            <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
-              Education
-            </h1>
-          </a>
-          <a
-            className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
-            onClick={() => {
-              onOpenProjects();
-            }}
-          >
-            <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
-              Startups/projects
-            </h1>
-          </a>
-          <a
-            className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
-            onClick={() => {
-              onOpenHighlights();
-            }}
-          >
-            <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
-              Highlights
-            </h1>
-          </a>
-          <a
-            href="https://iamvs2002.hashnode.dev/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
-            onClick={toggleMenu}
-          >
-            <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
-              Blog
-            </h1>
-          </a>
-          <a
-            href="mailto:work.iamvs2002@gmail.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="py-3 md:py-4 2xl:py-5 align-middle no-underline"
-            onClick={toggleMenu}
-          >
-            <h1 className="text-white text-3xl md:text-4xl 2xl:text-5xl font-bold opacity-80 hover:opacity-100">
-              Let&apos;s Connect!
-            </h1>
-          </a>
+          {navigation.menu.map((entry) => (
+            <MenuLink
+              key={
+                entry.type === "modal"
+                  ? `modal-${entry.id}`
+                  : `link-${entry.href}`
+              }
+              entry={entry}
+              onOpenModal={openModal}
+              toggleMenu={toggleMenu}
+            />
+          ))}
         </div>
         <Footer mode="light" />
       </div>

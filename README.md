@@ -1,74 +1,171 @@
 # iamvs2002 — personal site
 
-Minimal single-page site: random pastel background, [Sketch.js](https://github.com/soulwire/sketch.js) brush strokes on pointer movement, header logo, and a slide-out menu with modals for bio, résumé-style sections, and outbound links.
+Single-page portfolio: interactive [Sketch.js](https://github.com/soulwire/sketch.js) canvas, header logo, slide-out menu, and modals for bio, work history, education, startups, highlights, and outbound links.
 
 **Live:** [iamvs-2002.github.io](https://iamvs-2002.github.io/)
 
+---
+
 ## Stack
 
-| Layer    | Choice |
-| -------- | ------ |
-| UI       | React 18, TypeScript |
-| Build    | Vite 6 |
-| Styling  | Tailwind CSS 4 (Vite plugin) |
+| Layer | Choice |
+| ----- | ------ |
+| UI | React 18, TypeScript |
+| Build | Vite 6 |
+| Styling | Tailwind CSS 4 (Vite plugin) |
 | Graphics | Sketch.js |
-| Icons    | Font Awesome (React) |
+| Icons | Font Awesome (React) |
+| Hosting | GitHub Pages (static `dist/`) |
+
+---
+
+## Prerequisites
+
+- **Node.js** 18+ (20 LTS recommended)
+- **npm** 9+
+
+---
+
+## Getting started
+
+```bash
+git clone https://github.com/iamvs-2002/iamvs-2002.github.io.git
+cd iamvs-2002.github.io
+npm install
+npm run dev
+```
+
+Open the URL Vite prints (usually `http://localhost:5173`). Edit files and save; the dev server hot-reloads.
+
+---
 
 ## Scripts
 
+| Command | Purpose |
+| ------- | ------- |
+| `npm run dev` / `npm start` | Dev server (Vite) |
+| `npm run build` | Typecheck + production build → `dist/` |
+| `npm run preview` | Serve `dist/` locally (test the real bundle) |
+| `npm run lint` | ESLint |
+
+Before opening a PR, run **`npm run build`** and **`npm run lint`** so CI and reviewers see a clean tree.
+
+---
+
+## Project layout (short)
+
+| Path | Role |
+| ---- | ---- |
+| `src/App.tsx` | Canvas, header, menu, modal routing |
+| `src/site.ts` | Canonical site URL (`SITE_URL`) for logo links |
+| `src/components/` | Modals, menu, footer, `ModalShell` |
+| `src/data/` | `workExperience.ts`, `highlights.ts` |
+| `public/` | Favicons, manifest, `work/` and `highlights/` images |
+| `index.html` | HTML shell; Vite injects bundled JS/CSS in production |
+
+---
+
+## Configuration
+
+| Concern | Where |
+| ------- | ----- |
+| Public site URL | `src/site.ts`, meta tags in `index.html`, absolute URLs in `public/site.webmanifest` |
+| Asset base path | `vite.config.ts` → `base` (use `"/"` for `https://USER.github.io/`) |
+
+Keep these in sync when the deploy URL changes.
+
+---
+
+## Deploy (GitHub Pages)
+
+This repo is a **user site**: **`username.github.io`** → served from **`https://iamvs-2002.github.io/`** with **`base: "/"`**.
+
+GitHub Pages serves **static files only**. It does **not** run `npm run build`. You must build locally (or in CI) and publish the **`dist/`** output.
+
+### One-time: Pages settings
+
+1. Repo **Settings → Pages**.
+2. **Build and deployment → Source:** **Deploy from a branch**.
+3. **Branch:** **`gh-pages`**, folder **`/ (root)`** (not `main`).
+
+### Each release
+
 ```bash
-npm install     # dependencies
-npm run dev     # local dev server
-npm run build   # production build → dist/
-npm run preview # serve dist locally
-npm run lint    # ESLint
+npm run build
+npx gh-pages -d dist
 ```
 
-## Menu → modals & links
+`gh-pages` updates the **`gh-pages`** branch with the contents of **`dist/`** and pushes to `origin`. After a minute, the live site should match.
+
+### If the site shows a blank page or MIME errors
+
+The live site must use the **built** `index.html` (it references `/assets/*.js`), not the dev `index.html` (which references `/src/main.tsx`). That means Pages must serve **`gh-pages`** (built assets), not **`main`** (source). Fix: run the commands above and confirm **Settings → Pages** uses **`gh-pages`**.
+
+---
+
+## Contributing
+
+This repository is a **personal portfolio**. External contributions are welcome for small, clear improvements—bug fixes, accessibility, performance, typos, or documentation—provided they do not change the owner’s biographical content without discussion.
+
+1. **Fork** the repository and create a **branch** from `main` (e.g. `fix/menu-focus`).
+2. Make focused changes; **match existing** patterns (TypeScript, Tailwind, component structure).
+3. Run **`npm run lint`** and **`npm run build`**; fix any errors.
+4. Open a **pull request** with a short description of *what* and *why*.
+5. For **content** that is clearly personal (bio, jobs, projects), open an **issue first** so expectations are aligned.
+
+Issues and PRs that only adjust third-party dependencies without a security or bugfix reason may be declined.
+
+---
+
+## Menu → modals
 
 | Menu item | Behavior |
 | --------- | -------- |
-| About | Profile, socials, short bio (`AboutModal`) |
-| Work experience | Roles and summaries (`WorkExperienceModal`, data in `src/data/workExperience.ts`) |
-| Education | LNMIIT degree (`EducationModal`) |
-| Startups/projects | Needle, MoveOnFromYourEx, URL2Mockup (`ProjectsModal`, `src/data` inline) |
-| Highlights | HackZurich, Hacker Cup, Checked It (`HighlightsModal`, `src/data/highlights.ts`) |
+| About | Profile, socials, bio (`AboutModal`) |
+| Work experience | Résumé-style list (`WorkExperienceModal`, `src/data/workExperience.ts`) |
+| Education | Degree and coursework (`EducationModal`) |
+| Startups/projects | Products and links (`ProjectsModal`) |
+| Highlights | Events and links (`HighlightsModal`, `src/data/highlights.ts`) |
 | Blog | External → Hashnode |
 | Let’s Connect | `mailto:` |
 
-Header logo and menu logo link to the canonical site URL from `src/site.ts`.
+Header and menu logo URLs use `SITE_URL` from `src/site.ts`.
+
+---
 
 ## Where to edit content
 
 | What | Where |
 | ---- | ----- |
-| Deploy / canonical URL | `src/site.ts`, `index.html`, `public/site.webmanifest` |
+| Canonical / SEO URL | `src/site.ts`, `index.html`, `public/site.webmanifest` |
 | Work history | `src/data/workExperience.ts` |
-| Highlights (copy + links) | `src/data/highlights.ts` |
-| Startups/projects list | `src/components/ProjectsModal.tsx` (`projects` array) |
-| About copy | `src/components/AboutModal.tsx` |
-| Education copy | `src/components/EducationModal.tsx` |
-| Background color pool | `src/components/Colors.tsx` |
+| Highlights | `src/data/highlights.ts` |
+| Startups / projects | `src/components/ProjectsModal.tsx` (`projects` array) |
+| About | `src/components/AboutModal.tsx` |
+| Education | `src/components/EducationModal.tsx` |
+| Background color palette | `src/components/Colors.tsx` |
 
-Shared modal chrome lives in `ModalShell.tsx`.
+Shared modal UI: `ModalShell.tsx`.
+
+---
 
 ## Static assets
 
 ### `public/work/` — company logos (work experience)
 
-Use these filenames (paths in code are `/work/...`):
+Referenced as `/work/...` in code:
 
 | File | Company |
 | ---- | ------- |
-| `blogvault.png` | BlogVault (SDE + intern) |
+| `blogvault.png` | BlogVault |
 | `acm.png` | ACM, LNMIIT |
 | `atomei.jpeg` | Atom EI |
 | `gpcssip.jpeg` | Gurugram Police Cyber Cell |
 | `engineerHub.png` | engineerHUB |
 
-The LNMIIT teaching-assistant row uses a hosted LNMIIT logo URL in `workExperience.ts` (no local file). Missing or broken images show a briefcase placeholder.
+LNMIIT TA uses a hosted logo URL in `workExperience.ts`. Missing images fall back to a placeholder in the UI.
 
-### `public/highlights/` — event / org marks
+### `public/highlights/` — highlight images
 
 | File | Highlight |
 | ---- | --------- |
@@ -76,11 +173,15 @@ The LNMIIT teaching-assistant row uses a hosted LNMIIT logo URL in `workExperien
 | `hackercup.jpg` | Meta Hacker Cup |
 | `checkedit.jpg` | Checked It |
 
-Missing files fall back to Font Awesome icons (`src/data/highlights.ts`).
+Missing files fall back to icons from `src/data/highlights.ts`.
 
-## GitHub profile `README`
+---
 
-If you use the special [`username/username`](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme) repo on GitHub, copy from [`GITHUB_PROFILE_README.md`](./GITHUB_PROFILE_README.md) into that repo’s root `README.md` (keep the project site README here unchanged).
+## GitHub profile README (optional)
+
+If you use the special [`username/username`](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme) profile repository, keep its **live URL** and branding aligned with `src/site.ts` and this README.
+
+---
 
 ## License
 

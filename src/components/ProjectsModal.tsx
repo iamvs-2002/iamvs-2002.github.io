@@ -63,7 +63,7 @@ const ProjectsModal = ({ isOpen, onClose }: ProjectsModalProps) => {
                   <a
                     href={project.href}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer dofollow"
                     className={`mt-4 inline-flex items-center gap-2 text-sm font-semibold ${project.linkClass}`}
                   >
                     Visit {project.visitLabel}

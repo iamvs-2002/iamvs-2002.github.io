@@ -272,11 +272,11 @@ const projectEntries: ProjectEntry[] = [
     linkClass: "text-slate-800 transition-colors hover:text-slate-600"
   },
   {
-    name: "MoveOnFromYourEx",
+    name: "moveonfromyourex",
     tagline: "AI-powered breakup recovery—structure when emotions run high.",
     description:
       "A healing companion for messy moments: no-contact tracking, journaling with insights, message guidance, and daily support so you can process feelings, avoid impulsive decisions, and rebuild at your own pace.",
-    logo: "https://moveonfromyourex.com/logo48.webp",
+    logo: "https://moveonfromyourex.com/logo-light.png",
     logoClass: "h-12 w-12 object-contain",
     href: "https://moveonfromyourex.com/",
     visitLabel: "moveonfromyourex.com",
@@ -293,6 +293,17 @@ const projectEntries: ProjectEntry[] = [
     visitLabel: "url2mockup.com",
     linkClass: "text-violet-900/90 transition-colors hover:text-violet-700",
   },
+  {
+    name: "Remixly",
+    tagline: "Ship a month of brand-aligned remixes from one website URL.",
+    description:
+      "Remixly turns your site into swipe-ready short-form content—hooks, captions, and auto-rendered 9:16 video, so a single URL becomes a month of on-brand reels. Early access opening soon.",
+    logo: "https://useremixly.com/logo.png",
+    logoClass: "h-12 w-12 object-contain",
+    href: "https://useremixly.com/",
+    visitLabel: "useremixly.com",
+    linkClass: "text-blue-900/90 transition-colors hover:text-blue-700",
+  },
 ];
 
 const educationCoursework = [
@@ -306,12 +317,15 @@ const educationCoursework = [
   "Computer security",
 ];
 
-/** Paragraphs may use `**like this**` for bold segments (rendered in AboutModal). */
+/**
+ * Paragraphs may use `**like this**` for bold segments and `[label](url)` for
+ * links (rendered in AboutModal). Product mentions link out do-follow.
+ */
 const aboutParagraphs: [string, string] = [
   [
     "I build products where the problem is messy and the outcome matters. ",
-    "**Needle** helps founders surface the customer conversations hiding in communities—so growth starts from signal, not guesswork. ",
-    "**MoveOnFromYourEx** is an AI-supported space for people navigating a breakup with structure and care. CS from LNMIIT (2023); before going full-time on these companies, I worked on firewall and platform security for 300K+ WordPress sites handling on the order of a billion requests a day.",
+    "[**Needle**](https://useneedle.net/) helps founders surface the customer conversations hiding in communities—so growth starts from signal, not guesswork. ",
+    "[**moveonfromyourex**](https://moveonfromyourex.com/) is an AI-supported space for people navigating a breakup with structure and care, and [**URL2Mockup**](https://url2mockup.com/) turns any URL into presentation-ready device mockups in seconds. CS from LNMIIT (2023); before going full-time on these companies, I worked on firewall and platform security for 300K+ WordPress sites handling on the order of a billion requests a day.",
   ].join(""),
   "Day to day that means product judgment, security architecture, vulnerability management, and backend systems that stay calm under load—whether we are turning noisy social data into something a founder can ship against, or earning trust in a sensitive user journey. If you are working on something ambitious, practical, or slightly impossible, I am easy to reach.",
 ];
@@ -363,7 +377,7 @@ export const portfolio = {
     modalAriaLabel: "Startups and projects",
     eyebrow: "Startups/projects",
     intro:
-      "Things I ship and own end-to-end—conversation intelligence, mental health–adjacent consumer product, and a free tool for instant mockups.",
+      "Things I ship and own end-to-end—conversation intelligence, AI short-form content, a mental health–adjacent consumer product, and a free tool for instant mockups.",
     entries: projectEntries,
   },
 

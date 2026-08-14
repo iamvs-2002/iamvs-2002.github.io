@@ -173,6 +173,12 @@ LNMIIT TA uses a hosted logo URL in `portfolio.ts` (`work.entries`). Missing ima
 
 Missing files fall back to icons from `portfolio.highlights` entries.
 
+### `public/og-image.png` — social share card
+
+1200×630 Open Graph / Twitter card (`og:image` + `twitter:image` in `index.html`).
+Regenerate with the ImageMagick script at `.freebuff/og-make.sh` (requires a
+headshot at `src/assets/img/vaibhav.jpeg`).
+
 ---
 
 ## GitHub profile README (optional)

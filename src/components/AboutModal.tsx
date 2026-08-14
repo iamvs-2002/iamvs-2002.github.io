@@ -14,12 +14,40 @@ interface AboutModalProps {
 const socialClass =
   "flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900";
 
+const LINK_RE = /^\[(.+)\]\((.+)\)$/;
+const BOLD_RE = /^\*\*(.+)\*\*$/;
+
+const inlineLinkClass =
+  "font-semibold text-gray-900 underline decoration-gray-300 underline-offset-4 transition-colors hover:text-indigo-700 hover:decoration-indigo-300";
+
 function RichParagraph({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
   return (
     <p>
       {parts.map((part, i) => {
-        const m = part.match(/^\*\*(.+)\*\*$/);
+        const link = part.match(LINK_RE);
+        if (link) {
+          const labelParts = link[1].split(/(\*\*[^*]+\*\*)/g);
+          return (
+            <a
+              key={i}
+              href={link[2]}
+              target="_blank"
+              rel="noopener noreferrer dofollow"
+              className={inlineLinkClass}
+            >
+              {labelParts.map((labelPart, j) => {
+                const bold = labelPart.match(BOLD_RE);
+                return bold ? (
+                  <strong key={j}>{bold[1]}</strong>
+                ) : (
+                  <Fragment key={j}>{labelPart}</Fragment>
+                );
+              })}
+            </a>
+          );
+        }
+        const m = part.match(BOLD_RE);
         if (m) {
           return (
             <strong key={i} className="font-semibold text-gray-900">
